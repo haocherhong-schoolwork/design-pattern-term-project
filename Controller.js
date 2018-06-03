@@ -2,6 +2,8 @@ export default class Controller {
     view;
     model;
 
+    shouldOutputReport = false;
+
     constructor(view, model) {
         this.model = model;
         this.view = view;
@@ -9,8 +11,9 @@ export default class Controller {
         this.model.onProgressUpdated = this.onProgressUpdated;
         this.model.onStateUpdated = this.onStateUpdated;
 
-        this.view.onReadFilename = this.loadFile;
-        this.view.onReadTrain = this.train;
+        this.view.onReadFilename = this.handleReadFilename;
+        this.view.onReadTrain = this.handleReadTrain;
+        this.view.onReadOutput = this.handleReadOutput;
     }
 
     onProgressUpdated = () => {
@@ -19,13 +22,19 @@ export default class Controller {
 
     onStateUpdated = () => {
         this.view.writeState(this.model.trainingState);
+        if (this.model.trainingState === 'DONE' && this.shouldOutputReport)
+            this.view.writeReport(this.model.trainingReport);
     }
 
-    loadFile = filename => {
+    handleReadFilename = filename => {
         this.model.loadCSV(filename);
     }
 
-    train = yField => {
+    handleReadTrain = yField => {
         this.model.train(yField);
+    }
+
+    handleReadOutput = () => {
+        this.shouldOutputReport = true;
     }
 }

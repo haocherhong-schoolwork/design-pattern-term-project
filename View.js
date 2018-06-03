@@ -1,13 +1,19 @@
+const noOperation = () => {};
+
 export default class View {
-    onReadFilename; // Delegator
-    onReadTrain; // Delegator
+    // Delegators
+    onReadFilename = noOperation;
+    onReadTrain = noOperation;
+    onReadOutput = noOperation;
 
     read() {
+        // handle first argument, filename.
         if (!process.argv[2])
             return console.error('filename arg expected.')
 
         this.onReadFilename(process.argv[2]);
 
+        // handle option: -t
         const trainIndex = process.argv.indexOf('-t');
         if (trainIndex !== -1) {
             const yField = process.argv[trainIndex + 1];
@@ -15,6 +21,10 @@ export default class View {
                 return console.error('yField after -t expected')
             this.onReadTrain(yField);
         }
+
+        // handle option: -o
+        if (process.argv.indexOf('-o') !== -1)
+            this.onReadOutput();
     }
 
     writeProgress(rate) {
@@ -27,5 +37,9 @@ export default class View {
 
     writeState(state) {
         console.log(`Training state: ${state}`);
+    }
+
+    writeReport(report) {
+        console.log(report);
     }
 }

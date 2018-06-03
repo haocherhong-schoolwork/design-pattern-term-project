@@ -5,6 +5,8 @@ const BINARY_FIELDS = ['建物現況格局-隔間', '有無管理組織'];
 const ENUM_FIELDS = ['鄉鎮市區'];
 
 export default class Transaction {
+    static EnumMap = new Map();
+
     constructor(object) {
         for (let field of NUMERIC_FIELDS) {
             this[field] = parseInt(object[field]);
@@ -21,5 +23,3 @@ export default class Transaction {
         }
     }
 }
-
-Transaction.EnumMap = new Map();

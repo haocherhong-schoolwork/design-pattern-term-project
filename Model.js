@@ -2,13 +2,20 @@ import fs from 'fs';
 import Transaction from './Transaction';
 import svm from 'node-svm';
 
+const noOperation = () => {};
+
 export default class Model {
-    onStateUpdated; // Delegate
-    onProgressUpdated; // Delegate
+    // Delegates
+    onStateUpdated = noOperation;
+    onProgressUpdated = noOperation;
 
-    trainingState = 'INITIAL';
+    // Public
+    trainingState = 'INITIAL';  // Possible states: INITIAL, LOADED, TRAINING, DONE
     trainingProgress = 0;
+    trainedModel;
+    trainingReport;
 
+    // Private
     _transactions;
 
     // load csv file into an array of Transactions
@@ -66,6 +73,10 @@ export default class Model {
             .progress(rate => {
                 this.trainingProgress = rate;
                 this.onProgressUpdated();
+            })
+            .spread((trainedModel, trainingReport) => {
+                this.trainedModel = trainedModel;
+                this.trainingReport = trainingReport;
             })
             .done(() => {
                 this.trainingState = 'DONE';

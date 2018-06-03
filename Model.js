@@ -23,7 +23,7 @@ export default class Model {
         const input = fs.readFileSync(filename, 'utf8'); // load file into string
         const rows = input.split('\r\n'); // split string into rows
         const headers = rows[0].split(','); // row 0 is header
-        const output = [];
+        this._transactions = [];
         for (let i = 2; i < rows.length; i++) { // iterate from row 2 to the end
             const row = rows[i];
             const columns = row.split(','); // split row into columns
@@ -34,12 +34,11 @@ export default class Model {
             try {
                 // convert plain object to Transaction
                 const transaction = new Transaction(object);
-                output.push(transaction);
+                this._transactions.push(transaction);
             } catch (e) {
                 // console.error(e);
             }
         }
-        this._transactions = output;
 
         this.trainingState = 'LOADED';
         this.onStateUpdated();

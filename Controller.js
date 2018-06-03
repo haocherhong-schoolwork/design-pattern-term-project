@@ -8,19 +8,19 @@ export default class Controller {
         this.model = model;
         this.view = view;
 
-        this.model.onProgressUpdated = this.onProgressUpdated;
-        this.model.onStateUpdated = this.onStateUpdated;
+        this.model.onProgressUpdated = this.handleProgressUpdated;
+        this.model.onStateUpdated = this.handleStateUpdated;
 
         this.view.onReadFilename = this.handleReadFilename;
         this.view.onReadTrain = this.handleReadTrain;
         this.view.onReadOutput = this.handleReadOutput;
     }
 
-    onProgressUpdated = () => {
+    handleProgressUpdated = () => {
         this.view.writeProgress(this.model.trainingProgress);
     }
 
-    onStateUpdated = () => {
+    handleStateUpdated = () => {
         this.view.writeState(this.model.trainingState);
         if (this.model.trainingState === 'DONE' && this.shouldOutputReport)
             this.view.writeReport(this.model.trainingReport);

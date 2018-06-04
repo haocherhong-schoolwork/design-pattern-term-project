@@ -2,4 +2,4 @@
 require("babel-register");
 
 // load the main script
-require('./main');
+require('./src/main');

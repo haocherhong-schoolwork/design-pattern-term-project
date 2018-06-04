@@ -1,0 +1,17 @@
+Usage:
+    train [inputFile] [yField] [options]
+    train [options]
+
+Description:
+    Train a model with inputFile and yField as output column
+
+Options:
+    -o [path]       Save the trained model to path
+    -h              Show this help message
+    -k [kernalType] Train the model using specific kernalType
+
+Kernal Types:
+    LINEAR
+    POLY
+    RBF (default)
+    SIGMOID

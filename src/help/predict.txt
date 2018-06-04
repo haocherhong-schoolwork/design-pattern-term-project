@@ -1,0 +1,10 @@
+Usage:
+    predict [inputFile] [yField] [model] [options]
+    predict [options]
+
+Description:
+    Predict yField in inputFile with trained model
+
+Options:
+    -h              Show this help message
+    -o [path]       Save the result to path

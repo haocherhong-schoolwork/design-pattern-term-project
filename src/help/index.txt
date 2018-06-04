@@ -1,0 +1,7 @@
+Usage:
+    [command] [arguments]
+
+commands:
+    help          Show this help message
+    train         Train a new model
+    predict       Make prediction using trained model

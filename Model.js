@@ -1,6 +1,7 @@
 import fs from 'fs';
-import Transaction from './Transaction';
 import svm from 'node-svm';
+import Dataset from './Dataset';
+import Transaction from './Transaction';
 
 const noOperation = () => {};
 
@@ -17,6 +18,7 @@ export default class Model {
 
     // Private
     _transactions;
+    _dataset;
 
     // load csv file into an array of Transactions
     loadCSV(filename) {
@@ -39,30 +41,14 @@ export default class Model {
                 // console.error(e);
             }
         }
+        this._dataset = new Dataset(this._transactions);
 
         this.trainingState = 'LOADED';
         this.onStateUpdated();
     }
 
-    // Returns [x, y] tuples converted from _transactions
-    getTrainData(yField) {
-        return this._transactions.map(input => {
-            const x = [];
-            let y;
-            for (let attr in input) {
-                const value = input[attr];
-                if (attr === yField) {
-                    y = value;
-                } else {
-                    x.push(value);
-                }
-            }
-            return [x, y];
-        });
-    }
-
     train(yField) {
-        const trainData = this.getTrainData(yField);
+        const trainData = this._dataset.toTrainingData(yField);
         const clf = new svm.CSVC();
 
         this.trainingState = 'TRAINING';

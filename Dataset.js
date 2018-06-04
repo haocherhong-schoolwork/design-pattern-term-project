@@ -8,6 +8,10 @@ export default class Dataset {
         this._dataEntries = set;
     }
 
+    toTrainingData(yField) {
+        return this._dataEntries.map(entry => entry.toTrainingData(yField));
+    }
+
     [Symbol.iterator] = () => {
         return new DatasetIterator(this._dataEntries);
     }

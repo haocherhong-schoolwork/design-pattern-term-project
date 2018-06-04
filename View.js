@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 const noOperation = () => {};
 
 export default class View {
@@ -7,6 +9,10 @@ export default class View {
     onReadOutput = noOperation;
 
     read() {
+        // handle option: -h
+        if (process.argv[2] === '-h')
+            return this.writeHelp();
+
         // handle first argument, filename.
         if (!process.argv[2])
             return console.error('filename arg expected.')
@@ -41,5 +47,9 @@ export default class View {
 
     writeReport(report) {
         console.log(report);
+    }
+
+    writeHelp() {
+        console.log(fs.readFileSync('help.txt', 'utf8'));
     }
 }

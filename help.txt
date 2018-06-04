@@ -1,0 +1,7 @@
+Usage:
+    node ./ input.csv [options]
+
+Options:
+    -t [yField]     Train a model with input data and yField as output column
+    -o              Print the training report
+    -h              show this help message

@@ -19,15 +19,35 @@ export default class View {
         const args = process.argv.slice(3);
 
         if (COMMANDS.indexOf(command) === -1)
-            return this.writeHelp();
+            return this._writeHelp();
 
-        this[command](args);
+        this['_' + command](args);
     }
 
-    train(args) {
+    writeProgress(rate) {
+        process.stdout.clearLine();
+        process.stdout.cursorTo(0);
+        process.stdout.write(`Training progress: ${Math.round(rate * 100)}%`);
+        if (rate === 1)
+            process.stdout.write('\n');
+    }
+
+    writeState(state) {
+        console.log(`Training state: ${state}`);
+    }
+
+    write(message) {
+        console.log(message);
+    }
+
+    _writeHelp(filename = 'index.txt') {
+        console.log(fs.readFileSync(path.resolve(__dirname, 'help/', filename), 'utf8'));
+    }
+
+    _train(args) {
         // handle option: -h
         if (args.indexOf('-h') !== -1)
-            return this.writeHelp('train.txt');
+            return this._writeHelp('train.txt');
 
         const inputFile = args[0];
         if (!inputFile)
@@ -60,10 +80,10 @@ export default class View {
         this.onReadTrain(inputFile, yField, options);
     }
 
-    predict(args) {
+    _predict(args) {
         // handle option: -h
         if (args.indexOf('-h') !== -1)
-            return this.writeHelp('predict.txt');
+            return this._writeHelp('predict.txt');
 
         if (!args[0])
             return console.error('inputFile arg expected.');
@@ -94,27 +114,8 @@ export default class View {
         this.onReadPredict(inputFile, yField, model, options);
     }
 
-    help(args) {
-        this.writeHelp();
+    _help(args) {
+        this._writeHelp();
     }
 
-    writeProgress(rate) {
-        process.stdout.clearLine();
-        process.stdout.cursorTo(0);
-        process.stdout.write(`Training progress: ${Math.round(rate * 100)}%`);
-        if (rate === 1)
-            process.stdout.write('\n');
-    }
-
-    writeState(state) {
-        console.log(`Training state: ${state}`);
-    }
-
-    write(message) {
-        console.log(message);
-    }
-
-    writeHelp(filename = 'index.txt') {
-        console.log(fs.readFileSync(path.resolve(__dirname, 'help/', filename), 'utf8'));
-    }
 }

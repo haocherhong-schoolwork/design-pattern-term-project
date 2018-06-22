@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import svm from 'node-svm';
-import TransactionDataset from './TransactionDataset';
+import TransactionDataSet from './TransactionDataSet';
 
 const noOperation = () => {};
 
@@ -22,8 +22,10 @@ export default class Model {
 
     // load csv file into an array of Transactions
     loadCSV(filename) {
-        this._dataset = new TransactionDataset(filename);
-        this._dataset.fixMissing();
+        this._dataset = new TransactionDataSet(filename)
+            .shuffle()
+            .limit(2000)
+            .fixMissing();
         this.trainingState = 'LOADED';
         this.onStateUpdated();
     }

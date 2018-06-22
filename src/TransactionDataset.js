@@ -2,12 +2,12 @@ import fs from 'fs';
 import path from 'path';
 
 import TransactionDataEntry, {NUMERIC_FIELDS, BINARY_FIELDS, ENUM_FIELDS} from './TransactionDataEntry';
-import Dataset from './Dataset';
+import DataSet from './DataSet';
 import meanAggregator from './aggregators/meanAggregator';
 import combineAggregators from './aggregators/combineAggregators';
 import useMean from './missingFixers/useMean';
 
-export default class TransactionDataset extends Dataset {
+export default class TransactionDataSet extends DataSet {
     static loadCSV = filename => {
         const input = fs.readFileSync(filename, 'utf8'); // load file into string
         const rows = input.split('\r\n'); // split string into rows
@@ -27,7 +27,7 @@ export default class TransactionDataset extends Dataset {
     }
 
     constructor(filename) {
-        const dataEntries = TransactionDataset.loadCSV(filename);
+        const dataEntries = TransactionDataSet.loadCSV(filename);
         const fields = [
             ...NUMERIC_FIELDS,
             ...BINARY_FIELDS,

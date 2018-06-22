@@ -1,39 +1,39 @@
 export default class Controller {
-    view;
-    model;
+    _view;
+    _model;
 
     constructor(view, model) {
-        this.model = model;
-        this.view = view;
+        this._model = model;
+        this._view = view;
 
-        this.model.onProgressUpdated = this.handleProgressUpdated;
-        this.model.onStateUpdated = this.handleStateUpdated;
+        this._model.onProgressUpdated = this.handleProgressUpdated;
+        this._model.onStateUpdated = this.handleStateUpdated;
 
-        this.view.onReadTrain = this.handleReadTrain;
-        this.view.onReadPredict = this.handleReadPredict;
+        this._view.onReadTrain = this.handleReadTrain;
+        this._view.onReadPredict = this.handleReadPredict;
     }
 
     handleProgressUpdated = () => {
-        this.view.writeProgress(this.model.trainingProgress);
+        this._view.writeProgress(this._model.trainingProgress);
     }
 
     handleStateUpdated = () => {
-        this.view.writeState(this.model.trainingState);
-        if (this.model.trainingState === 'TRAINED' && this.model.trainingReport)
-            this.view.write(this.model.trainingReport);
+        this._view.writeState(this._model.trainingState);
+        if (this._model.trainingState === 'TRAINED' && this._model.trainingReport)
+            this._view.write(this._model.trainingReport);
     }
 
     handleReadTrain = (inputFile, yField, options = {}) => {
-        this.model.loadCSV(inputFile);
-        this.model.train(yField, options);
+        this._model.loadCSV(inputFile);
+        this._model.train(yField, options);
     }
 
     handleReadPredict = (inputFile, yField, model, options = {}) => {
-        this.model.loadCSV(inputFile);
-        this.model.loadModel(model);
-        const predictions = this.model.predict(yField, options);
+        this._model.loadCSV(inputFile);
+        this._model.loadModel(model);
+        const predictions = this._model.predict(yField, options);
 
         if (!options.outputPath)
-            this.view.write(predictions);
+            this._view.write(predictions);
     }
 }

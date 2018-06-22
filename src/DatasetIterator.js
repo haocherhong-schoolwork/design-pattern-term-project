@@ -1,4 +1,4 @@
-export default class DatasetIterator {
+export default class DataSetIterator {
     _nextIndex = 0;
     _dataEntries;
 

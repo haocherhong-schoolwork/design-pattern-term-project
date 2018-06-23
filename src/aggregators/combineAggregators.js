@@ -1,10 +1,14 @@
+import Aggregator from './Aggregator';
+
 export default function combineAggregators(aggregators) {
-    return function(acc, current, index, array) {
+    const aggregator = new Aggregator();
+    aggregator.aggregate = function aggregate (acc, current, index, array) {
         const reuslt = {};
         for(let name in aggregators) {
             const aggregator = aggregators[name];
-            reuslt[name] = aggregator(acc[name], current, index, array)
+            reuslt[name] = aggregator.aggregate(acc[name], current, index, array)
         }
         return reuslt;
     }
+    return aggregator;
 }

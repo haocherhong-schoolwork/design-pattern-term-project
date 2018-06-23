@@ -21,6 +21,13 @@ export default class Controller {
         this._view.writeState(this._model.trainingState);
         if (this._model.trainingState === 'TRAINED' && this._model.trainingReport)
             this._view.write(this._model.trainingReport);
+        else if (this._model.trainingState === 'LOADED') {
+            this._view.write('DataSet loaded:');
+            const samples = this._model._dataset.shuffle().limit(3);
+            for (let sample of samples)
+                this._view.write(sample);
+            this._view.write('more...');
+        }
     }
 
     handleReadTrain = (inputFile, yField, options = {}) => {

@@ -24,7 +24,7 @@ export default class DataSet {
 
         this._dataEntries.forEach((dataEntry, index, array) => {
             for (let field in aggregators) {
-                aggregation[field] = aggregators[field](aggregation[field], dataEntry[field], index, array);
+                aggregation[field] = aggregators[field].aggregate(aggregation[field], dataEntry[field], index, array);
             }
         });
 
@@ -45,7 +45,7 @@ export default class DataSet {
             const transformedDataEntry = new DataEntry();
             for (let field of this._fields) {
                 if (dataEntry[field] === null)
-                    transformedDataEntry[field] = this._missingFixers[field](aggregation[field]);
+                    transformedDataEntry[field] = this._missingFixers[field].fix(aggregation[field]);
                 else
                     transformedDataEntry[field] = dataEntry[field];
             }

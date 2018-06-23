@@ -1,11 +1,10 @@
 import fs from 'fs';
-import path from 'path';
 
 import TransactionDataEntry, {NUMERIC_FIELDS, BINARY_FIELDS, ENUM_FIELDS} from './TransactionDataEntry';
 import DataSet from './DataSet';
-import meanAggregator from './aggregators/meanAggregator';
 import combineAggregators from './aggregators/combineAggregators';
-import useMean from './missingFixers/useMean';
+import MeanAggregator from './aggregators/MeanAggregator';
+import MeanMissingFixer from './missingFixers/MeanMissingFixer';
 
 export default class TransactionDataSet extends DataSet {
     static loadCSV = filename => {
@@ -38,9 +37,9 @@ export default class TransactionDataSet extends DataSet {
 
         for (let field of NUMERIC_FIELDS) {
             aggregators[field] = combineAggregators({
-                'mean': meanAggregator
+                'mean': new MeanAggregator()
             });
-            missingFixers[field] = useMean
+            missingFixers[field] = new MeanMissingFixer()
         }
 
         super(dataEntries, fields, aggregators, missingFixers);
